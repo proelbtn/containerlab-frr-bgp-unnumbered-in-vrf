@@ -1,0 +1,35 @@
+name: test
+prefix: ""
+
+topology:
+  kinds:
+    linux:
+      image: quay.io/frrouting/frr:9.0.1
+      cmd: /bin/bash /start.sh
+
+  nodes:
+    rt01:
+      kind: linux
+      binds:
+      - daemons:/etc/frr/daemons
+      - rt01/frr.conf:/etc/frr/frr.conf:ro
+      - rt01/start.sh:/start.sh
+
+    rt02:
+      kind: linux
+      binds:
+      - daemons:/etc/frr/daemons
+      - rt02/frr.conf:/etc/frr/frr.conf:ro
+      - rt02/start.sh:/start.sh
+
+    rt03:
+      kind: linux
+      binds:
+      - daemons:/etc/frr/daemons
+      - rt03/frr.conf:/etc/frr/frr.conf:ro
+      - rt03/start.sh:/start.sh
+
+  links:
+    - endpoints: ["rt01:eth1", "rt02:eth1"]
+    - endpoints: ["rt01:eth2", "rt03:eth1"]
+
